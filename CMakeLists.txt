@@ -5,39 +5,21 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-include(FetchContent)
-
-# 1. CLAP
-FetchContent_Declare(
-    clap
-    GIT_REPOSITORY https://github.com/free-audio/clap.git
-    GIT_TAG main
+# Daftarkan jalur include dari folder deps
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/deps/clap/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/deps/pugl/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/deps/pugl
+    ${CMAKE_CURRENT_SOURCE_DIR}/deps/nanovg/src
 )
 
-# 2. PUGL
-FetchContent_Declare(
-    pugl
-    GIT_REPOSITORY https://github.com/lv2/pugl.git
-    GIT_TAG main
-)
+# Kumpulkan implementasi C Pugl & NanoVG
+file(GLOB_RECURSE PUGL_C_FILES "${CMAKE_CURRENT_SOURCE_DIR}/deps/pugl/src/*.c")
 
-# 3. NANOVG
-FetchContent_Declare(
-    nanovg
-    GIT_REPOSITORY https://github.com/memononen/nanovg.git
-    GIT_TAG master
-)
-
-# Matikan opsi dokumentasi & tes bawaan pugl biar build awan ngebut
-set(PUGL_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(PUGL_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-
-FetchContent_MakeAvailable(clap pugl nanovg)
-
-# Build Monolith Shared Library (.clap)
 add_library(JoyzEquZTone SHARED
     JOYZEquZTone4K64BandDynamic_Monolith.cpp
-    ${nanovg_SOURCE_DIR}/src/nanovg.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/deps/nanovg/src/nanovg.c
+    ${PUGL_C_FILES}
 )
 
 set_target_properties(JoyzEquZTone PROPERTIES
@@ -45,20 +27,11 @@ set_target_properties(JoyzEquZTone PROPERTIES
     SUFFIX ".clap"
 )
 
-# Tautkan direktori include dan wrapper Pugl
-target_include_directories(JoyzEquZTone PRIVATE
-    ${clap_SOURCE_DIR}/include
-    ${pugl_SOURCE_DIR}/include
-    ${pugl_SOURCE_DIR}/include/pugl
-    ${nanovg_SOURCE_DIR}/src
-)
-
-# Link library target resmi pugl
 target_link_libraries(JoyzEquZTone PRIVATE
-    pugl_gl-0
-    pugl-0
     GL
     X11
+    Xcursor
+    Xrandr
     pthread
     m
     dl
