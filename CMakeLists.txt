@@ -58,6 +58,11 @@ target_include_directories(JoyzEquZTone PRIVATE
     ${nanovg_SOURCE_DIR}/src
 )
 
+target_link_libraries(JoyzEquZTone PRIVATE
+    pugl::pugl_gl
+    pugl::pugl
+)
+
 # ============================================================================
 # LINKING OS (LINUX MURNI) + MENDUKUNG ATOMIC THREADING
 # ============================================================================
