@@ -16,7 +16,14 @@ jobs:
     - name: Pasang Syaraf Linux (X11 & OpenGL)
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake build-essential libx11-dev libgl1-mesa-dev
+        sudo apt-get install -y cmake build-essential libx11-dev libgl1-mesa-dev libxcursor-dev libxrandr-dev
+
+    - name: Sedot Dependensi Eksplisit
+      run: |
+        mkdir -p deps
+        git clone --depth 1 https://github.com/free-audio/clap.git deps/clap
+        git clone --depth 1 --branch v0.4.0 https://github.com/lv2/pugl.git deps/pugl || git clone --depth 1 https://github.com/lv2/pugl.git deps/pugl
+        git clone --depth 1 https://github.com/memononen/nanovg.git deps/nanovg
 
     - name: Proses Masak Pabrik Warlord (CMake)
       run: |
