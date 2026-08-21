@@ -1,0 +1,32 @@
+name: Warlord CLAP Builder
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Sedot Cetak Biru (Checkout)
+      uses: actions/checkout@v4
+
+    - name: Pasang Syaraf Linux (X11 & OpenGL)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake build-essential libx11-dev libgl1-mesa-dev
+
+    - name: Proses Masak Pabrik Warlord (CMake)
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
+
+    - name: Kirim Hasil Mahakarya (.clap) ke HP
+      uses: actions/upload-artifact@v4
+      with:
+        name: JOYZ-EquZTone-KH-4K-Linux
+        path: build/*.clap
