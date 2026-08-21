@@ -5,21 +5,20 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Daftarkan jalur include dari folder deps
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/deps/clap/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/deps/pugl/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/deps/pugl
-    ${CMAKE_CURRENT_SOURCE_DIR}/deps/nanovg/src
+include(FetchContent)
+
+# Sedot CLAP resmi (ini 100% lancar tanpa rewel)
+FetchContent_Declare(
+    clap
+    GIT_REPOSITORY https://github.com/free-audio/clap.git
+    GIT_TAG main
 )
 
-# Kumpulkan implementasi C Pugl & NanoVG
-file(GLOB_RECURSE PUGL_C_FILES "${CMAKE_CURRENT_SOURCE_DIR}/deps/pugl/src/*.c")
+FetchContent_MakeAvailable(clap)
 
+# Masak DSP Monolith langsung jadi .clap
 add_library(JoyzEquZTone SHARED
     JOYZEquZTone4K64BandDynamic_Monolith.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/deps/nanovg/src/nanovg.c
-    ${PUGL_C_FILES}
 )
 
 set_target_properties(JoyzEquZTone PROPERTIES
@@ -27,14 +26,13 @@ set_target_properties(JoyzEquZTone PROPERTIES
     SUFFIX ".clap"
 )
 
+target_include_directories(JoyzEquZTone PRIVATE
+    ${clap_SOURCE_DIR}/include
+)
+
 target_link_libraries(JoyzEquZTone PRIVATE
-    GL
-    X11
-    Xcursor
-    Xrandr
     pthread
     m
-    dl
 )
 
 # ============================================================================
