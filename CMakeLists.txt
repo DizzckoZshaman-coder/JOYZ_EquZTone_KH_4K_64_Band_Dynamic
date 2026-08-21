@@ -28,13 +28,15 @@ FetchContent_Declare(
     GIT_TAG master
 )
 
+# Matikan opsi dokumentasi & tes bawaan pugl biar build awan ngebut
+set(PUGL_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(PUGL_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+
 FetchContent_MakeAvailable(clap pugl nanovg)
 
 # Build Monolith Shared Library (.clap)
 add_library(JoyzEquZTone SHARED
     JOYZEquZTone4K64BandDynamic_Monolith.cpp
-    ${pugl_SOURCE_DIR}/src/x11.c
-    ${pugl_SOURCE_DIR}/src/x11_gl.c
     ${nanovg_SOURCE_DIR}/src/nanovg.c
 )
 
@@ -43,13 +45,18 @@ set_target_properties(JoyzEquZTone PROPERTIES
     SUFFIX ".clap"
 )
 
+# Tautkan direktori include dan wrapper Pugl
 target_include_directories(JoyzEquZTone PRIVATE
     ${clap_SOURCE_DIR}/include
     ${pugl_SOURCE_DIR}/include
+    ${pugl_SOURCE_DIR}/include/pugl
     ${nanovg_SOURCE_DIR}/src
 )
 
+# Link library target resmi pugl
 target_link_libraries(JoyzEquZTone PRIVATE
+    pugl_gl-0
+    pugl-0
     GL
     X11
     pthread
