@@ -18,11 +18,11 @@ FetchContent_Declare(
     GIT_TAG main
 )
 
-# 2. Sedot PUGL Pusat
+# 2. Sedot PUGL (Ganti master jadi main!)
 FetchContent_Declare(
     pugl
     GIT_REPOSITORY https://github.com/lv2/pugl.git
-    GIT_TAG master
+    GIT_TAG main
 )
 
 # 3. Sedot NANOVG Pusat
