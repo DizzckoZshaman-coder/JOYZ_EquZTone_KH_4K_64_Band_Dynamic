@@ -11,24 +11,24 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # ============================================================================
 include(FetchContent)
 
-# 1. Sedot CLAP
+# 1. Sedot CLAP Pusat
 FetchContent_Declare(
     clap
-    GIT_REPOSITORY https://gitlab.com/joyzmusic-mirrors/clap.git
+    GIT_REPOSITORY https://github.com/free-audio/clap.git
     GIT_TAG main
 )
 
-# 2. Sedot PUGL
+# 2. Sedot PUGL Pusat
 FetchContent_Declare(
     pugl
-    GIT_REPOSITORY https://gitlab.com/joyzmusic-mirrors/pugl.git
+    GIT_REPOSITORY https://github.com/lv2/pugl.git
     GIT_TAG master
 )
 
-# 3. Sedot NANOVG
+# 3. Sedot NANOVG Pusat
 FetchContent_Declare(
     nanovg
-    GIT_REPOSITORY https://gitlab.com/joyzmusic-mirrors/nanovg.git
+    GIT_REPOSITORY https://github.com/memononen/nanovg.git
     GIT_TAG master
 )
 
